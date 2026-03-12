@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "mcp-review": {
+      "command": "/Users/olegs/src/experiments/mcp-review/.venv/bin/python3.12",
+      "args": ["-m", "mcp_review.server"],
+      "cwd": "/Users/olegs/src/experiments/mcp-review"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+[project]
+name = "mcp-review"
+version = "1.0.0"
+description = "MCP tool for human-in-the-loop review of Claude Code output"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/olegs/mcp-review"
+Repository = "https://github.com/olegs/mcp-review"
+
+[project.scripts]
+mcp-review = "mcp_review.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
