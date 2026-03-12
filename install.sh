@@ -26,7 +26,7 @@ if command -v uvx &>/dev/null; then
 
 elif command -v pipx &>/dev/null; then
     echo "→ Installing via pipx..."
-    pipx install mcp-review
+    pipx install mcp-review 2>/dev/null || pipx upgrade mcp-review
     RUN_CMD="mcp-review"
 
 else
@@ -40,13 +40,15 @@ else
     echo "→ Creating venv at $VENV_DIR..."
     "$PYTHON" -m venv "$VENV_DIR"
     echo "→ Installing into venv..."
-    "$VENV_DIR/bin/pip" install "$REPO_DIR"
+    "$VENV_DIR/bin/pip" install --upgrade "$REPO_DIR"
     RUN_CMD="$VENV_DIR/bin/mcp-review"
 fi
 
 # ── 2. Register the MCP server with Claude Code (user scope = global) ─────────
 
 echo "→ Registering MCP server with Claude Code..."
+# Remove existing registration if present, then re-add
+claude mcp remove mcp-review -s user 2>/dev/null || true
 # shellcheck disable=SC2086
 claude mcp add -s user mcp-review -- $RUN_CMD
 
