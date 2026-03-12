@@ -6,6 +6,20 @@ COMMAND_FILE="$(dirname "$0")/.claude/commands/review.md"
 
 # ── 1. Install the package and determine the run command ─────────────────────
 
+# Find Python 3.10+
+find_python() {
+    for cmd in python3.13 python3.12 python3.11 python3.10 python3 python; do
+        if command -v "$cmd" &>/dev/null; then
+            version=$("$cmd" -c "import sys; print(sys.version_info >= (3,10))" 2>/dev/null)
+            if [[ "$version" == "True" ]]; then
+                echo "$cmd"
+                return 0
+            fi
+        fi
+    done
+    return 1
+}
+
 if command -v uvx &>/dev/null; then
     echo "→ Using uvx (no install needed)"
     RUN_CMD="uvx mcp-review"
@@ -16,16 +30,14 @@ elif command -v pipx &>/dev/null; then
     RUN_CMD="mcp-review"
 
 else
-    echo "→ Installing via pip..."
     REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
-    if command -v pip3 &>/dev/null; then
-        pip3 install --user "$REPO_DIR"
-    elif command -v python3 &>/dev/null; then
-        python3 -m pip install --user "$REPO_DIR"
-    else
-        echo "Error: no pip, pip3, or python3 found. Install Python 3.10+ first."
+    PYTHON=$(find_python || true)
+    if [[ -z "$PYTHON" ]]; then
+        echo "Error: Python 3.10+ not found. Install it first (e.g. brew install python@3.12)."
         exit 1
     fi
+    echo "→ Installing via $PYTHON..."
+    "$PYTHON" -m pip install --user "$REPO_DIR"
     RUN_CMD="mcp-review"
 fi
 
