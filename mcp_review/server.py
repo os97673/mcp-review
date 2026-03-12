@@ -64,12 +64,7 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         tmp_path = f.name
 
     try:
-        editor = os.environ.get("GUI_EDITOR")
-        if not editor:
-            raise RuntimeError(
-                "GUI_EDITOR is not set. Set it to a GUI editor that blocks until closed, "
-                "e.g.: export GUI_EDITOR=\"code --wait\""
-            )
+        editor = os.environ.get("GUI_EDITOR", "code --wait")
         cmd = shlex.split(editor) + [tmp_path]
         subprocess.run(cmd, check=True)
 
