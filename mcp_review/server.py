@@ -22,7 +22,7 @@ async def list_tools() -> list[types.Tool]:
         types.Tool(
             name="review",
             description=(
-                "Opens content in the user's $EDITOR for review. "
+                "Opens content in the user's $GUI_EDITOR for review. "
                 "The user may add '# TODO: <comment>' annotations. "
                 "Returns the edited content as-is."
             ),
@@ -64,24 +64,14 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         tmp_path = f.name
 
     try:
-        editor = os.environ.get("EDITOR") or os.environ.get("VISUAL") or "vi"
+        editor = os.environ.get("GUI_EDITOR")
+        if not editor:
+            raise RuntimeError(
+                "GUI_EDITOR is not set. Set it to a GUI editor that blocks until closed, "
+                "e.g.: export GUI_EDITOR=\"code --wait\""
+            )
         cmd = shlex.split(editor) + [tmp_path]
-
-        # MCP communicates over stdio. We must attach the editor to the actual
-        # terminal (/dev/tty) instead of inherited stdio to avoid corrupting
-        # the MCP protocol.
-        if os.name == "nt":
-            # Windows: let the shell handle it
-            subprocess.run(cmd, check=True)
-        else:
-            with open("/dev/tty", "r") as tty_in, open("/dev/tty", "w") as tty_out:
-                subprocess.run(
-                    cmd,
-                    stdin=tty_in,
-                    stdout=tty_out,
-                    stderr=tty_out,
-                    check=True,
-                )
+        subprocess.run(cmd, check=True)
 
         edited = Path(tmp_path).read_text(encoding="utf-8")
     finally:

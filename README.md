@@ -26,12 +26,16 @@ claude mcp add -s user mcp-review -- uvx mcp-review
 
 ## Setup
 
-Make sure `$EDITOR` is set in your shell:
+Make sure `$GUI_EDITOR` is set in your shell to a GUI editor that blocks until
+the file is closed. Terminal editors (vim, nano) don't work because Claude Code's
+TUI rendering conflicts with them.
 
 ```bash
-export EDITOR="code --wait"   # VS Code
-export EDITOR="emacsclient"   # Emacs
-export EDITOR="vim"           # Vim
+export GUI_EDITOR="code --wait"      # VS Code
+export GUI_EDITOR="emacsclient -c"   # Emacs (GUI frame)
+export GUI_EDITOR="mvim --nofork"    # MacVim
+export GUI_EDITOR="subl --wait"      # Sublime Text
+export GUI_EDITOR="zed --wait"       # Zed
 ```
 
 ## Usage

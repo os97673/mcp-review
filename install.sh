@@ -58,4 +58,4 @@ cp "$COMMAND_FILE" "$COMMAND_DIR/review.md"
 
 echo ""
 echo "Done. Open a new Claude Code session and try /review."
-echo "Make sure \$EDITOR is set (e.g. export EDITOR=\"code --wait\")."
+echo "Make sure \$GUI_EDITOR is set (e.g. export GUI_EDITOR=\"code --wait\")."
