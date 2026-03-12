@@ -17,7 +17,14 @@ elif command -v pipx &>/dev/null; then
 
 else
     echo "→ Installing via pip..."
-    pip install --user mcp-review
+    if command -v pip3 &>/dev/null; then
+        pip3 install --user mcp-review
+    elif command -v python3 &>/dev/null; then
+        python3 -m pip install --user mcp-review
+    else
+        echo "Error: no pip, pip3, or python3 found. Install Python 3.10+ first."
+        exit 1
+    fi
     RUN_CMD="mcp-review"
 fi
 
