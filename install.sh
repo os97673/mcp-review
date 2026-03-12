@@ -36,9 +36,12 @@ else
         echo "Error: Python 3.10+ not found. Install it first (e.g. brew install python@3.12)."
         exit 1
     fi
-    echo "→ Installing via $PYTHON..."
-    "$PYTHON" -m pip install --user "$REPO_DIR"
-    RUN_CMD="mcp-review"
+    VENV_DIR="${HOME}/.local/share/mcp-review/venv"
+    echo "→ Creating venv at $VENV_DIR..."
+    "$PYTHON" -m venv "$VENV_DIR"
+    echo "→ Installing into venv..."
+    "$VENV_DIR/bin/pip" install "$REPO_DIR"
+    RUN_CMD="$VENV_DIR/bin/mcp-review"
 fi
 
 # ── 2. Register the MCP server with Claude Code (user scope = global) ─────────
