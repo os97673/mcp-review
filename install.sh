@@ -4,6 +4,14 @@ set -euo pipefail
 COMMAND_DIR="${HOME}/.claude/commands"
 COMMAND_FILE="$(dirname "$0")/.claude/commands/iterate.md"
 
+# Parse --editor flag
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --editor) GUI_EDITOR="$2"; shift 2 ;;
+        *) echo "Unknown option: $1"; exit 1 ;;
+    esac
+done
+
 # ── 1. Install the package and determine the run command ─────────────────────
 
 # Find Python 3.10+
@@ -49,8 +57,10 @@ fi
 echo "→ Registering MCP server with Claude Code..."
 # Remove existing registration if present, then re-add
 claude mcp remove mcp-review -s user 2>/dev/null || true
+# Bake GUI_EDITOR into the server registration so it works in non-interactive shells
+GUI_EDITOR="${GUI_EDITOR:-code --wait}"
 # shellcheck disable=SC2086
-claude mcp add -s user mcp-review -- $RUN_CMD
+claude mcp add -s user -e "GUI_EDITOR=${GUI_EDITOR}" mcp-review -- $RUN_CMD
 
 # ── 3. Install the /iterate slash command globally ────────────────────────────
 
@@ -60,4 +70,4 @@ cp "$COMMAND_FILE" "$COMMAND_DIR/iterate.md"
 
 echo ""
 echo "Done. Open a new Claude Code session and try /iterate."
-echo "Make sure \$GUI_EDITOR is set (e.g. export GUI_EDITOR=\"code --wait\")."
+echo "Editor: ${GUI_EDITOR}  (re-run with --editor '...' to change)"

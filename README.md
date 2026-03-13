@@ -9,7 +9,8 @@ have Claude iterate until you're satisfied.
 ```bash
 git clone https://github.com/olegs/mcp-review
 cd mcp-review
-./install.sh
+./install.sh                                 # defaults to VS Code
+./install.sh --editor "zed --wait"           # or any other GUI editor
 ```
 
 Or with `uvx` (no clone needed):
@@ -20,8 +21,8 @@ mkdir -p ~/.claude/commands
 curl -o ~/.claude/commands/iterate.md \
   https://raw.githubusercontent.com/olegs/mcp-review/main/.claude/commands/iterate.md
 
-# Register the MCP server
-claude mcp add -s user mcp-review -- uvx mcp-review
+# Register the MCP server (bakes your editor into the server config)
+claude mcp add -s user -e "GUI_EDITOR=code --wait" mcp-review -- uvx mcp-review
 ```
 
 ## Setup
