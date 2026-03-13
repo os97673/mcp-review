@@ -2,7 +2,7 @@
 set -euo pipefail
 
 COMMAND_DIR="${HOME}/.claude/commands"
-COMMAND_FILE="$(dirname "$0")/.claude/commands/review.md"
+COMMAND_FILE="$(dirname "$0")/.claude/commands/iterate.md"
 
 # ── 1. Install the package and determine the run command ─────────────────────
 
@@ -52,12 +52,12 @@ claude mcp remove mcp-review -s user 2>/dev/null || true
 # shellcheck disable=SC2086
 claude mcp add -s user mcp-review -- $RUN_CMD
 
-# ── 3. Install the /review slash command globally ─────────────────────────────
+# ── 3. Install the /iterate slash command globally ────────────────────────────
 
-echo "→ Installing /review slash command..."
+echo "→ Installing /iterate slash command..."
 mkdir -p "$COMMAND_DIR"
-cp "$COMMAND_FILE" "$COMMAND_DIR/review.md"
+cp "$COMMAND_FILE" "$COMMAND_DIR/iterate.md"
 
 echo ""
-echo "Done. Open a new Claude Code session and try /review."
+echo "Done. Open a new Claude Code session and try /iterate."
 echo "Make sure \$GUI_EDITOR is set (e.g. export GUI_EDITOR=\"code --wait\")."
