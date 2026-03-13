@@ -4,13 +4,31 @@ set -euo pipefail
 COMMAND_DIR="${HOME}/.claude/commands"
 COMMAND_FILE="$(dirname "$0")/.claude/commands/iterate.md"
 
+usage() {
+    echo "Usage: $0 --editor <command>"
+    echo ""
+    echo "Examples:"
+    echo "  $0 --editor 'code --wait'       # VS Code"
+    echo "  $0 --editor 'emacsclient -c'    # Emacs (GUI frame)"
+    echo "  $0 --editor 'mvim --nofork'     # MacVim"
+    echo "  $0 --editor 'subl --wait'       # Sublime Text"
+    echo "  $0 --editor 'zed --wait'        # Zed"
+    exit 1
+}
+
 # Parse --editor flag
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --editor) GUI_EDITOR="$2"; shift 2 ;;
-        *) echo "Unknown option: $1"; exit 1 ;;
+        *) echo "Unknown option: $1"; usage ;;
     esac
 done
+
+if [[ -z "${GUI_EDITOR:-}" ]]; then
+    echo "Error: --editor is required"
+    echo ""
+    usage
+fi
 
 # ── 1. Install the package and determine the run command ─────────────────────
 
@@ -58,7 +76,6 @@ echo "→ Registering MCP server with Claude Code..."
 # Remove existing registration if present, then re-add
 claude mcp remove mcp-review -s user 2>/dev/null || true
 # Bake GUI_EDITOR into the server registration so it works in non-interactive shells
-GUI_EDITOR="${GUI_EDITOR:-code --wait}"
 # shellcheck disable=SC2086
 claude mcp add -s user -e "GUI_EDITOR=${GUI_EDITOR}" mcp-review -- $RUN_CMD
 
