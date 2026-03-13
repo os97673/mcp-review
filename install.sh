@@ -77,7 +77,7 @@ echo "→ Registering MCP server with Claude Code..."
 claude mcp remove mcp-review -s user 2>/dev/null || true
 # Bake GUI_EDITOR into the server registration so it works in non-interactive shells
 # shellcheck disable=SC2086
-claude mcp add -s user -e "GUI_EDITOR=${GUI_EDITOR}" mcp-review -- $RUN_CMD
+claude mcp add -s user mcp-review -e "GUI_EDITOR=${GUI_EDITOR}" -- $RUN_CMD
 
 # ── 3. Install the /iterate slash command globally ────────────────────────────
 
