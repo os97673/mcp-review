@@ -20,7 +20,7 @@ app = Server("mcp-review")
 async def list_tools() -> list[types.Tool]:
     return [
         types.Tool(
-            name="review",
+            name="iterate",
             description=(
                 "Opens content in the user's $GUI_EDITOR for review. "
                 "The user may add '# TODO: <comment>' annotations. "
@@ -49,7 +49,7 @@ async def list_tools() -> list[types.Tool]:
 
 @app.call_tool()
 async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
-    if name != "review":
+    if name != "iterate":
         raise ValueError(f"Unknown tool: {name}")
 
     content = arguments.get("content", "")

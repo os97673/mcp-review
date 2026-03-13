@@ -1,6 +1,6 @@
 # mcp-review
 
-Human-in-the-loop review for Claude Code. Use `/review` after any Claude
+Human-in-the-loop review for Claude Code. Use `/iterate` after any Claude
 response to open it in your editor, annotate with `# TODO:` comments, and
 have Claude iterate until you're satisfied.
 
@@ -17,8 +17,8 @@ Or with `uvx` (no clone needed):
 ```bash
 # Install the slash command
 mkdir -p ~/.claude/commands
-curl -o ~/.claude/commands/review.md \
-  https://raw.githubusercontent.com/olegs/mcp-review/main/.claude/commands/review.md
+curl -o ~/.claude/commands/iterate.md \
+  https://raw.githubusercontent.com/olegs/mcp-review/main/.claude/commands/iterate.md
 
 # Register the MCP server
 claude mcp add -s user mcp-review -- uvx mcp-review
@@ -41,7 +41,7 @@ export GUI_EDITOR="zed --wait"       # Zed
 ## Usage
 
 1. Ask Claude anything — get a plan, analysis, code review, etc.
-2. Type `/review`
+2. Type `/iterate`
 3. Your editor opens with Claude's response
 4. Add `# TODO: <comment>` on any line you want addressed
 5. Save and close
@@ -51,5 +51,5 @@ export GUI_EDITOR="zed --wait"       # Zed
 
 ```bash
 claude mcp remove mcp-review
-rm ~/.claude/commands/review.md
+rm ~/.claude/commands/iterate.md
 ```
